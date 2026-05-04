@@ -52,6 +52,11 @@ const Dashboard = ({ setActiveTab }: DashboardProps) => {
   const [showRevenueModal, setShowRevenueModal] = useState(false);
   const [showBlockedAppsModal, setShowBlockedAppsModal] = useState(false);
   const [showPremiumMembersModal, setShowPremiumMembersModal] = useState(false);
+  const [chartView, setChartView] = useState<'haftalik' | 'oylik'>('haftalik');
+
+  const chartData = chartView === 'haftalik'
+    ? { values: [35, 45, 30, 60, 75, 50, 90], labels: ['Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sh', 'Ya'] }
+    : { values: [20, 50, 40, 80, 60, 95, 85], labels: ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'Iyun', 'Iyul'] };
   // Joriy foydalanuvchi roli. Buni 'Admin' ga o'zgartirsangiz bo'limlar yashiriladi.
   const CURRENT_USER_ROLE = 'Super Admin';
 
@@ -178,30 +183,34 @@ const Dashboard = ({ setActiveTab }: DashboardProps) => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <h3 style={{ margin: 0, fontSize: '18px' }}>Foydalanuvchilar o'sishi</h3>
               <div style={{ display: 'flex', backgroundColor: '#1a1a1e', padding: '4px', borderRadius: '8px', border: `1px solid ${theme.colors.border}` }}>
-                <button style={{
+                <button 
+                  onClick={() => setChartView('haftalik')}
+                  style={{
                   padding: '4px 12px',
                   fontSize: '11px',
                   borderRadius: '6px',
                   border: 'none',
-                  backgroundColor: theme.colors.primary,
-                  color: '#fff',
+                  backgroundColor: chartView === 'haftalik' ? theme.colors.primary : 'transparent',
+                  color: chartView === 'haftalik' ? '#fff' : theme.colors.textMuted,
                   cursor: 'pointer',
                   fontWeight: '600'
                 }}>Haftalik</button>
-                <button style={{
+                <button 
+                  onClick={() => setChartView('oylik')}
+                  style={{
                   padding: '4px 12px',
                   fontSize: '11px',
                   borderRadius: '6px',
                   border: 'none',
-                  backgroundColor: 'transparent',
-                  color: theme.colors.textMuted,
+                  backgroundColor: chartView === 'oylik' ? theme.colors.primary : 'transparent',
+                  color: chartView === 'oylik' ? '#fff' : theme.colors.textMuted,
                   cursor: 'pointer',
                   fontWeight: '600'
                 }}>Oylik</button>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: '160px', padding: '20px 0', gap: '12px' }}>
-              {[35, 45, 30, 60, 75, 50, 90].map((h, i) => (
+              {chartData.values.map((h, i) => (
                 <div key={i} style={{
                   display: 'flex',
                   flexDirection: 'column',
@@ -242,7 +251,7 @@ const Dashboard = ({ setActiveTab }: DashboardProps) => {
                     cursor: 'pointer',
                     boxShadow: i === 6 ? `0 0 15px ${theme.colors.primary}40` : 'none'
                   }} className="growth-bar"></div>
-                  <span style={{ fontSize: '10px', color: theme.colors.textMuted, fontWeight: '600' }}>{['Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sh', 'Ya'][i]}</span>
+                  <span style={{ fontSize: '10px', color: theme.colors.textMuted, fontWeight: '600' }}>{chartData.labels[i]}</span>
                 </div>
               ))}
             </div>
